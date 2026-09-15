@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
+    "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
+    "module": "ESNext",
+    "strict": true,
     "paths": {
       "@/*": ["src/*"],
       "@/assets/*": ["assets/*"]

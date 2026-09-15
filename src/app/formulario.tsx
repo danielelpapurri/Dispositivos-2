@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
-  ScrollView,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  View,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
 } from "react-native";
 
 export default function Formulario() {
@@ -36,21 +36,21 @@ export default function Formulario() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>Registro de usuario</Text>
+      <Text style={styles.titulo}>Agenda tu visita</Text>
       <Text style={styles.subtitulo}>
-        Completa la información para continuar.
+        Un especialista te ayudará a encontrar la aeronave ideal.
       </Text>
 
       <View style={styles.card}>
-        <Text style={styles.label}>Nombre</Text>
+        <Text style={styles.label}>Nombre completo</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ingrese su nombre"
+          placeholder="Ej: Alejandro Rivera"
           value={nombre}
           onChangeText={setNombre}
         />
 
-        <Text style={styles.label}>Correo</Text>
+        <Text style={styles.label}>Correo electrónico</Text>
         <TextInput
           style={styles.input}
           placeholder="correo@dominio.com"
@@ -60,7 +60,7 @@ export default function Formulario() {
           onChangeText={setCorreo}
         />
 
-        <Text style={styles.label}>Teléfono</Text>
+        <Text style={styles.label}>Teléfono de contacto</Text>
         <TextInput
           style={styles.input}
           placeholder="3001234567"
@@ -69,16 +69,16 @@ export default function Formulario() {
           onChangeText={setTelefono}
         />
 
-        <Text style={styles.label}>Ciudad</Text>
+        <Text style={styles.label}>Aeronave de interés</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ej: Pasto"
+          placeholder="Ej: Cessna 172, Piper Archer..."
           value={ciudad}
           onChangeText={setCiudad}
         />
 
         <Pressable style={styles.boton} onPress={enviar}>
-          <Text style={styles.botonTexto}>Enviar información</Text>
+          <Text style={styles.botonTexto}>Solicitar asesoría</Text>
         </Pressable>
       </View>
     </ScrollView>
@@ -88,7 +88,7 @@ export default function Formulario() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    backgroundColor: "#FFF7FA",
+    backgroundColor: "#F4F7F8",
     padding: 20,
     justifyContent: "center",
   },
@@ -96,12 +96,12 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#6C4051",
+    color: "#092536",
     textAlign: "center",
   },
 
   subtitulo: {
-    color: "#8A727C",
+    color: "#607580",
     textAlign: "center",
     marginBottom: 20,
   },
@@ -111,27 +111,27 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#F2D5E0",
+    borderColor: "#D8E1E4",
     elevation: 3,
   },
 
   label: {
-    color: "#684552",
+    color: "#294856",
     fontWeight: "600",
     marginBottom: 6,
   },
 
   input: {
-    backgroundColor: "#FFF9FB",
+    backgroundColor: "#F8FAFA",
     borderWidth: 1,
-    borderColor: "#EBC8D6",
+    borderColor: "#C8D6DA",
     borderRadius: 13,
     padding: 12,
     marginBottom: 14,
   },
 
   boton: {
-    backgroundColor: "#C96A8B",
+    backgroundColor: "#0B3448",
     paddingVertical: 14,
     borderRadius: 13,
     alignItems: "center",

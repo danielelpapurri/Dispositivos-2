@@ -5,35 +5,35 @@ export default function Layout() {
     <Stack //pantallas de la aplicacion 
       screenOptions={{
         headerStyle: {
-          backgroundColor: "#C96A8B",
+          backgroundColor: "#092536",
         },
         headerTintColor: "#ffffff",
         headerTitleStyle: {
           fontWeight: "bold",
         },
         contentStyle: {
-          backgroundColor: "#FFF7FA",
+          backgroundColor: "#F4F7F8",
         },
       }}
     >
       <Stack.Screen //registra la pantalla de inicio en el navegador de la aplicacion 
         name="index"
-        options={{ title: "Inicio" }}
+        options={{ title: "Aeronova Garage" }}
       />
 
       <Stack.Screen
         name="formulario"
-        options={{ title: "Formulario" }}
+        options={{ title: "Agenda tu visita" }}
       />
 
       <Stack.Screen
         name="resultado"
-        options={{ title: "Datos registrados" }}
+        options={{ title: "Solicitud recibida" }}
       />
 
       <Stack.Screen
         name="imagenes"
-        options={{ title: "Galería" }}
+        options={{ title: "Aeronaves" }}
       />
 
       <Stack.Screen
