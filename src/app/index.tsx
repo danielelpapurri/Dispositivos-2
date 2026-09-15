@@ -16,9 +16,7 @@ export default function Inicio() {
       {/* PORTADA PRINCIPAL */}
       <View style={styles.hero}>
         <Image
-          source={{
-            uri: "https://images.unsplash.com/photo-1559628233-3c4b7b4b7b8b?auto=format&fit=crop&w=1400&q=85",
-          }}
+          source={require("../../assets/inicio.jpg")}
           style={styles.imagenHero}
         />
 
@@ -102,10 +100,10 @@ export default function Inicio() {
             styles.botonDestacada,
             pressed && styles.botonPresionado,
           ]}
-          onPress={() => router.push("/imagenes")}
+          onPress={() => router.push("/vuelos-prueba")}
         >
-          <Text style={styles.botonIcono}>★</Text>
-          <Text style={styles.botonTextoOscuro}>Aeronave destacada</Text>
+          <Text style={styles.botonIcono}>◉</Text>
+          <Text style={styles.botonTextoOscuro}>Vuelos de prueba</Text>
         </Pressable>
 
         <Pressable

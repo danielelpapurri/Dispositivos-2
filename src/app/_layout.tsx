@@ -40,6 +40,11 @@ export default function Layout() {
         name="contacto"
         options={{ title: "Contacto" }}
       />
+
+      <Stack.Screen
+        name="vuelos-prueba"
+        options={{ title: "Vuelos de prueba" }}
+      />
     </Stack>
   );
 }

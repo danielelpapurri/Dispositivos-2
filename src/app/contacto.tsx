@@ -1,6 +1,9 @@
+import { useRouter } from "expo-router";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function Contacto() {
+	const router = useRouter();
+
 	return (
 		<ScrollView contentContainerStyle={styles.container}>
 			<Text style={styles.eyebrow}>AERONOVA GARAGE</Text>
@@ -13,7 +16,7 @@ export default function Contacto() {
 				<Text style={styles.destacadoIcono}>⌖</Text>
 				<View>
 					<Text style={styles.destacadoTitulo}>Hangar principal</Text>
-					<Text style={styles.destacadoTexto}>Aeropuerto El Dorado · Bogotá</Text>
+					<Text style={styles.destacadoTexto}>Aeropuerto El Cesmag :) · PastoYork</Text>
 				</View>
 			</View>
 
@@ -24,12 +27,12 @@ export default function Contacto() {
 				</View>
 				<View style={styles.item}>
 					<Text style={styles.itemTitulo}>Habla con un asesor</Text>
-					<Text style={styles.itemTexto}>+57 310 555 0182 · hola@aeronovagarage.com</Text>
+					<Text style={styles.itemTexto}>+57 317 8232 220 · hola@aeronovagarage.com</Text>
 				</View>
 			</View>
 
-			<Pressable style={styles.boton}>
-				<Text style={styles.botonTexto}>Solicitar ubicación del hangar</Text>
+			<Pressable style={styles.boton} onPress={() => router.push("/formulario")}>
+				<Text style={styles.botonTexto}>Agenda tu visita</Text>
 			</Pressable>
 		</ScrollView>
 	);
