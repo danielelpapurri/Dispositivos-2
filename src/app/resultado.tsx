@@ -3,28 +3,30 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Resultado() {
 	const router = useRouter();
-	const { nombre, correo, telefono, ciudad } = useLocalSearchParams<{
+	const { nombre, correo, telefono, ciudad, cafe_favorito } = useLocalSearchParams<{
 		nombre: string;
 		correo: string;
 		telefono: string;
 		ciudad: string;
+		cafe_favorito: string;
 	}>();
 
 	return (
 		<View style={styles.container}>
 			<View style={styles.icono}><Text style={styles.check}>✓</Text></View>
-			<Text style={styles.eyebrow}>SOLICITUD RECIBIDA</Text>
-			<Text style={styles.titulo}>Gracias, {nombre || "piloto"}.</Text>
+			<Text style={styles.eyebrow}>PREFERENCIA GUARDADA</Text>
+			<Text style={styles.titulo}>Gracias, {nombre || "cliente"}.</Text>
 			<Text style={styles.texto}>
-				Un asesor de Aeronova Garage se pondrá en contacto contigo para hablar sobre {ciudad || "tu aeronave ideal"}.
+				Tu café favorito quedó registrado con éxito. Desde {ciudad || "tu ciudad"} ya puedes seguir disfrutando de la mejor experiencia de café.
 			</Text>
 			<View style={styles.resumen}>
-				<Text style={styles.label}>Datos de contacto</Text>
+				<Text style={styles.label}>Tus datos</Text>
 				<Text style={styles.dato}>{correo}</Text>
 				<Text style={styles.dato}>{telefono}</Text>
+				<Text style={styles.dato}>Café favorito: {cafe_favorito || "Sin dato"}</Text>
 			</View>
 			<Pressable style={styles.boton} onPress={() => router.replace("/")}>
-				<Text style={styles.botonTexto}>Volver al hangar</Text>
+				<Text style={styles.botonTexto}>Volver al inicio</Text>
 			</Pressable>
 		</View>
 	);

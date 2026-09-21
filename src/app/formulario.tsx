@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
+    Alert,
     Pressable,
     ScrollView,
     StyleSheet,
@@ -8,6 +9,7 @@ import {
     TextInput,
     View,
 } from "react-native";
+import { supabase } from "../lib/supabase";
 
 export default function Formulario() {
   const router = useRouter();
@@ -16,10 +18,34 @@ export default function Formulario() {
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
   const [ciudad, setCiudad] = useState("");
+  const [cafeFavorito, setCafeFavorito] = useState("");
 
-  const enviar = () => {
-    if (!nombre || !correo || !telefono || !ciudad) {
-      alert("Todos los campos son obligatorios");
+  const enviar = async () => {
+    if (!nombre || !correo || !telefono || !ciudad || !cafeFavorito) {
+      Alert.alert("Todos los campos son obligatorios");
+      return;
+    }
+
+    if (!supabase) {
+      Alert.alert(
+        "Falta la configuración de Supabase",
+        "Agrega NEXT_PUBLIC_SUPABASE_URL y NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY o EXPO_PUBLIC_SUPABASE_URL y EXPO_PUBLIC_SUPABASE_ANON_KEY en tu archivo .env o .env.local"
+      );
+      return;
+    }
+
+    const { error } = await supabase.from("clientes_cafe").insert([
+      {
+        nombre,
+        correo,
+        telefono,
+        ciudad,
+        cafe_favorito: cafeFavorito,
+      },
+    ]);
+
+    if (error) {
+      Alert.alert("Error", error.message);
       return;
     }
 
@@ -30,15 +56,16 @@ export default function Formulario() {
         correo,
         telefono,
         ciudad,
+        cafe_favorito: cafeFavorito,
       },
     });
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>Agenda tu visita</Text>
+      <Text style={styles.titulo}>Descubre tu café perfecto</Text>
       <Text style={styles.subtitulo}>
-        Un especialista te ayudará a encontrar la aeronave ideal.
+        Comparte tus datos y tu café favorito para recibir recomendaciones personalizadas.
       </Text>
 
       <View style={styles.card}>
@@ -69,16 +96,24 @@ export default function Formulario() {
           onChangeText={setTelefono}
         />
 
-        <Text style={styles.label}>Aeronave de interés</Text>
+        <Text style={styles.label}>Ciudad</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ej: Cessna 172, Piper Archer..."
+          placeholder="Ej: Medellín"
           value={ciudad}
           onChangeText={setCiudad}
         />
 
+        <Text style={styles.label}>Café favorito</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Ej: Latte, Americano, Cappuccino"
+          value={cafeFavorito}
+          onChangeText={setCafeFavorito}
+        />
+
         <Pressable style={styles.boton} onPress={enviar}>
-          <Text style={styles.botonTexto}>Solicitar asesoría</Text>
+          <Text style={styles.botonTexto}>Guardar mi favorito</Text>
         </Pressable>
       </View>
     </ScrollView>
