@@ -2,49 +2,21 @@ import { Stack } from "expo-router";
 
 export default function Layout() {
   return (
-    <Stack //pantallas de la aplicacion 
+    <Stack
       screenOptions={{
-        headerStyle: {
-          backgroundColor: "#092536",
-        },
+        headerStyle: { backgroundColor: "#092536" },
         headerTintColor: "#ffffff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-        contentStyle: {
-          backgroundColor: "#F4F7F8",
-        },
+        headerTitleStyle: { fontWeight: "bold" },
+        contentStyle: { backgroundColor: "#F4F7F8" },
       }}
     >
-      <Stack.Screen //registra la pantalla de inicio en el navegador de la aplicacion 
-        name="index"
-        options={{ title: "Aeronova Garage" }}
-      />
-
-      <Stack.Screen
-        name="formulario"
-        options={{ title: "Agenda tu visita" }}
-      />
-
-      <Stack.Screen
-        name="resultado"
-        options={{ title: "Solicitud recibida" }}
-      />
-
-      <Stack.Screen
-        name="imagenes"
-        options={{ title: "Aeronaves" }}
-      />
-
-      <Stack.Screen
-        name="contacto"
-        options={{ title: "Contacto" }}
-      />
-
-      <Stack.Screen
-        name="vuelos-prueba"
-        options={{ title: "Vuelos de prueba" }}
-      />
+      <Stack.Screen name="index" options={{ title: "Aeronova Garage" }} />
+      <Stack.Screen name="formulario" options={{ title: "Agenda tu visita" }} />
+      <Stack.Screen name="resultado" options={{ title: "Solicitud recibida" }} />
+      <Stack.Screen name="registros" options={{ title: "Pilotos Registrados" }} />
+      <Stack.Screen name="imagenes" options={{ title: "Aeronaves" }} />
+      <Stack.Screen name="contacto" options={{ title: "Contacto" }} />
+      <Stack.Screen name="vuelos-prueba" options={{ title: "Vuelos de prueba" }} />
     </Stack>
   );
 }
