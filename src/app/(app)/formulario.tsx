@@ -9,7 +9,7 @@ import {
     TextInput,
     View,
 } from "react-native";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 
 export default function Formulario() {
   const router = useRouter();

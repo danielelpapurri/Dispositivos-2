@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 
 export default function Layout() {
   return (
-    <Stack //pantallas de la aplicacion 
+    <Stack
       screenOptions={{
         headerStyle: {
           backgroundColor: "#092536",
@@ -16,35 +16,9 @@ export default function Layout() {
         },
       }}
     >
-      <Stack.Screen //registra la pantalla de inicio en el navegador de la aplicacion 
-        name="index"
-        options={{ title: "Aeronova Garage" }}
-      />
-
-      <Stack.Screen
-        name="formulario"
-        options={{ title: "Agenda tu visita" }}
-      />
-
-      <Stack.Screen
-        name="resultado"
-        options={{ title: "Solicitud recibida" }}
-      />
-
-      <Stack.Screen
-        name="imagenes"
-        options={{ title: "Aeronaves" }}
-      />
-
-      <Stack.Screen
-        name="contacto"
-        options={{ title: "Contacto" }}
-      />
-
-      <Stack.Screen
-        name="vuelos-prueba"
-        options={{ title: "Vuelos de prueba" }}
-      />
+      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      <Stack.Screen name="(app)" options={{ headerShown: false }} />
+      <Stack.Screen name="vuelos-prueba" options={{ title: "Vuelos de prueba" }} />
     </Stack>
   );
 }
