@@ -1,11 +1,11 @@
 import { useRouter } from "expo-router";
 import {
-    Image,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 
 export default function Inicio() {
@@ -79,6 +79,19 @@ export default function Inicio() {
           <Text style={[styles.botonIcono, styles.botonIconoGrande]}>✈</Text>
           <Text style={styles.botonTexto}>Aeronaves disponibles</Text>
         </Pressable>
+
+        {/* NUEVO: botón Pilotos Registrados */}
+        <Pressable
+          style={({ pressed }) => [
+            styles.botonGrande,
+            styles.botonPilotos,
+            pressed && styles.botonPresionado,
+          ]}
+          onPress={() => router.push("/registros")}
+        >
+          <Text style={[styles.botonIcono, styles.botonIconoGrande]}>👥</Text>
+          <Text style={styles.botonTexto}>Pilotos Registrados</Text>
+        </Pressable>
       </View>
 
       <View style={styles.filaBotones}>
@@ -132,7 +145,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F4F7F8",
     padding: 18,
   },
-
   hero: {
     height: 280,
     borderRadius: 24,
@@ -140,12 +152,10 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     elevation: 6,
   },
-
   imagenHero: {
     width: "100%",
     height: "100%",
   },
-
   overlay: {
     position: "absolute",
     left: 0,
@@ -154,7 +164,6 @@ const styles = StyleSheet.create({
     padding: 22,
     backgroundColor: "rgba(7, 28, 41, 0.82)",
   },
-
   etiqueta: {
     color: "#D7B56D",
     fontSize: 11,
@@ -162,20 +171,17 @@ const styles = StyleSheet.create({
     letterSpacing: 1.8,
     marginBottom: 6,
   },
-
   titulo: {
     color: "#FFFFFF",
     fontSize: 32,
     fontWeight: "bold",
     marginBottom: 6,
   },
-
   subtitulo: {
     color: "#E7EFF1",
     fontSize: 14,
     lineHeight: 21,
   },
-
   saludoBox: {
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
@@ -186,19 +192,16 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     elevation: 2,
   },
-
   saludoTitulo: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#092536",
   },
-
   saludoTexto: {
     marginTop: 3,
     color: "#607580",
     fontSize: 14,
   },
-
   avatar: {
     width: 50,
     height: 50,
@@ -207,11 +210,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
   avatarTexto: {
     fontSize: 24,
   },
-
   resumen: {
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
@@ -222,37 +223,31 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     elevation: 2,
   },
-
   resumenItem: {
     flex: 1,
     alignItems: "center",
   },
-
   resumenNumero: {
     color: "#B17C2F",
     fontSize: 18,
     fontWeight: "bold",
   },
-
   resumenTexto: {
     color: "#607580",
     fontSize: 12,
     marginTop: 3,
   },
-
   separador: {
     width: 1,
     height: 35,
     backgroundColor: "#D8E1E4",
   },
-
   seccionTitulo: {
     fontSize: 21,
     fontWeight: "bold",
     color: "#092536",
     marginBottom: 14,
   },
-
   card: {
     backgroundColor: "#FFFFFF",
     borderRadius: 20,
@@ -264,23 +259,19 @@ const styles = StyleSheet.create({
     borderColor: "#D8E1E4",
     elevation: 2,
   },
-
   cardPresionado: {
     backgroundColor: "#D7B56D",
     borderColor: "#B17C2F",
     transform: [{ scale: 0.98 }],
   },
-
   botonPrincipal: {
     width: "100%",
   },
-
   filaBotones: {
     flexDirection: "row",
     gap: 12,
     alignItems: "stretch",
   },
-
   botonGrande: {
     width: "100%",
     minHeight: 72,
@@ -292,7 +283,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     elevation: 3,
   },
-
   botonPequeno: {
     flex: 1,
     minHeight: 118,
@@ -303,49 +293,42 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     elevation: 3,
   },
-
   botonAeronaves: {
     backgroundColor: "#092536",
   },
-
+  botonPilotos: {
+    backgroundColor: "#B17C2F",  // ← color dorado para diferenciarlo
+  },
   botonContacto: {
     backgroundColor: "#D7B56D",
   },
-
   botonFormulario: {
     backgroundColor: "#B17C2F",
   },
-
   botonDestacada: {
     backgroundColor: "#E5EDF0",
   },
-
   botonPresionado: {
     opacity: 0.78,
     transform: [{ scale: 0.98 }],
   },
-
   botonIcono: {
     fontSize: 25,
     marginBottom: 7,
   },
-
   botonIconoGrande: {
     marginBottom: 0,
     marginRight: 10,
   },
-
   botonTexto: {
     color: "#FFFFFF",
     fontSize: 15,
     fontWeight: "bold",
     textAlign: "center",
   },
-
   botonTextoOscuro: {
     color: "#092536",
   },
-
   cardCompacto: {
     flex: 1,
     minHeight: 150,
@@ -353,7 +336,6 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "flex-start",
   },
-
   iconoCaja: {
     width: 56,
     height: 56,
@@ -363,39 +345,32 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 14,
   },
-
   cardCompactoIconoCaja: {
     marginRight: 0,
     marginBottom: 10,
   },
-
   icono: {
     fontSize: 25,
   },
-
   cardInfo: {
     flex: 1,
   },
-
   cardTitulo: {
     fontSize: 17,
     fontWeight: "bold",
     color: "#092536",
     marginBottom: 4,
   },
-
   cardDescripcion: {
     color: "#607580",
     fontSize: 13,
     lineHeight: 18,
   },
-
   flecha: {
     fontSize: 30,
     color: "#B17C2F",
     marginLeft: 8,
   },
-
   destacado: {
     backgroundColor: "#E5EDF0",
     borderRadius: 22,
@@ -404,7 +379,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 6,
   },
-
   destacadoIcono: {
     width: 52,
     height: 52,
@@ -414,28 +388,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: 14,
   },
-
   destacadoEmoji: {
     fontSize: 25,
   },
-
   destacadoInfo: {
     flex: 1,
   },
-
   destacadoTitulo: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#092536",
     marginBottom: 4,
   },
-
   destacadoTexto: {
     color: "#506873",
     fontSize: 13,
     lineHeight: 19,
   },
-
   footer: {
     textAlign: "center",
     color: "#78909A",
