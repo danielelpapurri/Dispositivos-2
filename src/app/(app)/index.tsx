@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
 import {
+  Alert,
   Image,
   Pressable,
   ScrollView,
@@ -7,22 +8,37 @@ import {
   Text,
   View,
 } from "react-native";
+import { supabase } from "../../lib/supabase";
 
 export default function Inicio() {
   const router = useRouter();
+
+  const cerrarSesion = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        Alert.alert("Cerrar sesión", error.message);
+      }
+    } catch (error) {
+      Alert.alert(
+        "Cerrar sesión",
+        error instanceof Error ? error.message : String(error),
+      );
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* PORTADA PRINCIPAL */}
       <View style={styles.hero}>
         <Image
-          source={require("../../assets/inicio.jpg")}
+          source={require("../../../assets/inicio.jpg")}
           style={styles.imagenHero}
         />
 
         <View style={styles.overlay}>
           <Text style={styles.etiqueta}>AERONOVA GARAGE</Text>
-          <Text style={styles.titulo}>Vuela más lejos.</Text>
+          <Text style={styles.titulo}>Compra tu próximo avión.</Text>
           <Text style={styles.subtitulo}>
             Aeronaves seleccionadas, revisadas y listas para tu próxima aventura.
           </Text>
@@ -77,10 +93,9 @@ export default function Inicio() {
           onPress={() => router.push("/imagenes")}
         >
           <Text style={[styles.botonIcono, styles.botonIconoGrande]}>✈</Text>
-          <Text style={styles.botonTexto}>Aeronaves disponibles</Text>
+          <Text style={styles.botonTexto}>Aviones en venta</Text>
         </Pressable>
 
-        {/* NUEVO: botón Pilotos Registrados */}
         <Pressable
           style={({ pressed }) => [
             styles.botonGrande,
@@ -90,7 +105,7 @@ export default function Inicio() {
           onPress={() => router.push("/registros")}
         >
           <Text style={[styles.botonIcono, styles.botonIconoGrande]}>👥</Text>
-          <Text style={styles.botonTexto}>Pilotos Registrados</Text>
+          <Text style={styles.botonTexto}>Solicitudes recibidas</Text>
         </Pressable>
       </View>
 
@@ -128,12 +143,16 @@ export default function Inicio() {
           onPress={() => router.push("/formulario")}
         >
           <Text style={styles.botonIcono}>✦</Text>
-          <Text style={styles.botonTexto}>Agenda una visita</Text>
+          <Text style={styles.botonTexto}>Solicitar información</Text>
         </Pressable>
       </View>
 
+      <Pressable style={styles.botonCerrar} onPress={cerrarSesion}>
+        <Text style={styles.textoCerrar}>Cerrar sesión</Text>
+      </Pressable>
+
       <Text style={styles.footer}>
-        AERONOVA GARAGE · VENTA DE AERONAVES
+        AERONOVA GARAGE · COMPRA Y VENTA DE AVIONES
       </Text>
     </ScrollView>
   );
@@ -328,6 +347,17 @@ const styles = StyleSheet.create({
   },
   botonTextoOscuro: {
     color: "#092536",
+  },
+  botonCerrar: {
+    backgroundColor: "#8E3B46",
+    padding: 14,
+    borderRadius: 14,
+    alignItems: "center",
+    marginTop: 20,
+  },
+  textoCerrar: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
   cardCompacto: {
     flex: 1,

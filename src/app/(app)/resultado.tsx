@@ -3,15 +3,13 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Resultado() {
   const router = useRouter();
-  const { id, nombre, correo, telefono, ciudad, avionFavorito, tipoVuelo } =
+  const { id, nombre, correo, telefono, aeronaveInteres } =
     useLocalSearchParams<{
       id: string;
       nombre: string;
       correo: string;
       telefono: string;
-      ciudad: string;
-      avionFavorito: string;
-      tipoVuelo: string;
+      aeronaveInteres: string;
     }>();
 
   return (
@@ -22,22 +20,21 @@ export default function Resultado() {
       <Text style={styles.eyebrow}>SOLICITUD GUARDADA</Text>
       <Text style={styles.titulo}>Gracias, {nombre || "cliente"}.</Text>
       <Text style={styles.texto}>
-        Tu aeronave favorita quedó registrada con éxito. Desde {ciudad || "tu ciudad"} ya puedes agendar tu visita al hangar.
+        Recibimos tu solicitud de información para comprar un avión. Nuestro equipo se pondrá en contacto contigo.
       </Text>
 
       <View style={styles.resumen}>
-        <Text style={styles.label}>Registro #{id}</Text>
+        {id ? <Text style={styles.label}>Registro #{id}</Text> : null}
         <Text style={styles.dato}>{correo}</Text>
         <Text style={styles.dato}>{telefono}</Text>
-        <Text style={styles.dato}>Aeronave favorita: {avionFavorito || "Sin dato"}</Text>
-        <Text style={styles.dato}>Tipo de vuelo: {tipoVuelo || "Sin dato"}</Text>
+        <Text style={styles.dato}>Avión de interés: {aeronaveInteres || "Sin dato"}</Text>
       </View>
 
       <Pressable
         style={styles.boton}
         onPress={() => router.push("/registros")}
       >
-        <Text style={styles.botonTexto}>Ver Pilotos Registrados</Text>
+        <Text style={styles.botonTexto}>Ver solicitudes</Text>
       </Pressable>
     </View>
   );

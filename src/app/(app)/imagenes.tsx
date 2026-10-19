@@ -55,13 +55,13 @@ export default function Imagenes() {
 				</View>
 			</View>
 			<Text style={styles.eyebrow}>INVENTARIO SELECCIONADO</Text>
-			<Text style={styles.titulo}>Aeronaves disponibles</Text>
+			<Text style={styles.titulo}>Aviones en venta</Text>
 			<Text style={styles.subtitulo}>
 				Máquinas con historial transparente, inspección vigente y acompañamiento de principio a fin.
 			</Text>
 			<View style={styles.resumen}>
 				<Text style={styles.resumenNumero}>{aeronaves.length}</Text>
-				<Text style={styles.resumenTexto}>aeronaves listas para conocer</Text>
+				<Text style={styles.resumenTexto}>aviones disponibles para la venta</Text>
 			</View>
 
 			{aeronaves.map((aeronave) => (

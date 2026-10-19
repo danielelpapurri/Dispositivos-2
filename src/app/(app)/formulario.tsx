@@ -2,7 +2,6 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -18,79 +17,51 @@ export default function Formulario() {
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [ciudad, setCiudad] = useState("");
-  const [avionFavorito, setAvionFavorito] = useState("");
-  const [tipoVuelo, setTipoVuelo] = useState("");
+  const [aeronaveInteres, setAeronaveInteres] = useState("");
   const [guardando, setGuardando] = useState(false);
+  const [mensaje, setMensaje] = useState("");
 
   const guardar = async () => {
-    if (!nombre || !correo || !telefono || !ciudad || !avionFavorito || !tipoVuelo) {
-      Alert.alert("Todos los campos son obligatorios");
+    if (!nombre.trim() || !correo.trim() || !telefono.trim() || !aeronaveInteres.trim()) {
+      setMensaje("Completa todos los campos para enviar la solicitud.");
       return;
     }
 
     try {
       setGuardando(true);
+      setMensaje("");
 
-      const { data, error } = await supabase
-        .from("clientes_avion")
+      const { error } = await supabase
+        .from("solicitudes_aeronova")
         .insert([
           {
-            nombre,
-            correo,
-            telefono,
-            ciudad,
-            avion_favorito: avionFavorito,
-            tipo_vuelo: tipoVuelo,
+            nombre_completo: nombre.trim(),
+            correo: correo.trim(),
+            telefono: telefono.trim(),
+            aeronave_interes: aeronaveInteres.trim(),
           },
-        ])
-        .select();
+        ]);
 
       if (error) {
-        console.log("Error Supabase:", error);
-
-        const mensajeError = String(error.message ?? "").toLowerCase();
-        const faltaRegistro =
-          mensajeError.includes("does not exist") ||
-          mensajeError.includes("not found") ||
-          mensajeError.includes("relation") ||
-          mensajeError.includes("table") ||
-          mensajeError.includes("invalid url") ||
-          mensajeError.includes("jwt") ||
-          mensajeError.includes("unauthorized");
-
-        Alert.alert(
-          faltaRegistro ? "Falta registrar en Supabase" : "Error",
-          faltaRegistro
-            ? "Crea la tabla clientes_avion en Supabase antes de guardar los datos."
-            : error.message,
-        );
+        setMensaje(`No se pudo guardar la solicitud: ${error.message}`);
         return;
       }
 
-      Alert.alert("Guardado", "que se ha guardado todo");
-
-      const registro = data?.[0];
-
-      if (registro) {
-        router.push({
-          pathname: "/resultado",
-          params: {
-            id: String(registro.id),
-            nombre: registro.nombre,
-            correo: registro.correo,
-            telefono: registro.telefono,
-            ciudad: registro.ciudad,
-            avionFavorito: registro.avion_favorito,
-            tipoVuelo: registro.tipo_vuelo,
-          },
-        });
-      } else {
-        router.push("/resultado");
-      }
+      router.push({
+        pathname: "/resultado",
+        params: {
+          nombre: nombre.trim(),
+          correo: correo.trim(),
+          telefono: telefono.trim(),
+          aeronaveInteres: aeronaveInteres.trim(),
+        },
+      });
     } catch (error) {
-      console.log(error);
-      Alert.alert("Error", "No fue posible guardar la información");
+      setMensaje(
+        `No se pudo guardar la solicitud: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
     } finally {
       setGuardando(false);
     }
@@ -98,10 +69,11 @@ export default function Formulario() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.titulo}>Agenda tu visita</Text>
+      <Text style={styles.titulo}>Solicita información</Text>
       <Text style={styles.subtitulo}>
-        Comparte tus datos y tu aeronave favorita para recibir atención personalizada.
+        Déjanos tus datos y el avión que te interesa comprar.
       </Text>
+      {mensaje ? <Text style={styles.error}>{mensaje}</Text> : null}
 
       <View style={styles.card}>
         <Text style={styles.label}>Nombre completo</Text>
@@ -131,28 +103,12 @@ export default function Formulario() {
           onChangeText={setTelefono}
         />
 
-        <Text style={styles.label}>Ciudad</Text>
+        <Text style={styles.label}>Avión de interés</Text>
         <TextInput
           style={styles.input}
-          placeholder="Ej: Bogotá"
-          value={ciudad}
-          onChangeText={setCiudad}
-        />
-
-        <Text style={styles.label}>Aeronave favorita</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ej: Cessna 172, Piper PA-28, Boeing 737"
-          value={avionFavorito}
-          onChangeText={setAvionFavorito}
-        />
-
-        <Text style={styles.label}>Tipo de vuelo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Ej: Recreativo, Comercial, Carga, Militar"
-          value={tipoVuelo}
-          onChangeText={setTipoVuelo}
+          placeholder="Ej: Cessna 172, Piper M350"
+          value={aeronaveInteres}
+          onChangeText={setAeronaveInteres}
         />
 
         <Pressable
@@ -220,5 +176,11 @@ const styles = StyleSheet.create({
   botonTexto: {
     color: "white",
     fontWeight: "bold",
+  },
+  error: {
+    color: "#9C2F36",
+    textAlign: "center",
+    marginBottom: 14,
+    lineHeight: 20,
   },
 });

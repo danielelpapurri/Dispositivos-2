@@ -1,46 +1,45 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
+import { Platform } from "react-native";
 import "react-native-url-polyfill/auto";
 
-<<<<<<< HEAD
-const supabaseUrl =
-=======
-const rawSupabaseUrl =
->>>>>>> 79ef313aabc4ad316b8ee8d663b807b138155234
+const configuredSupabaseKey =
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() ||
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY?.trim();
+const supabaseUrl = (
   process.env.EXPO_PUBLIC_SUPABASE_URL ??
-  "https://tmrlooalutwvtxqmqotq.supabase.co";
+  "https://idqvtkottipiutxawwmz.supabase.co"
+)
+  .trim()
+  .replace(/\/rest\/v1\/?$/, "")
+  .replace(/\/+$/, "");
+const supabaseAnonKey = configuredSupabaseKey || "missing-supabase-public-key";
 
-<<<<<<< HEAD
-const supabaseAnonKey =
-  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ??
-=======
-const rawSupabaseAnonKey =
->>>>>>> 79ef313aabc4ad316b8ee8d663b807b138155234
-  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ??
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcmxvb2FsdXR3dnR4cW1xb3RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0NzkwMDEsImV4cCI6MjEwNjA1NTAwMX0.udzfTutxo6CEy2C5jb7pgKDkCfuK7NlLh1yGpaB5i4I";
+export const supabaseMissingKey = !configuredSupabaseKey;
 
-<<<<<<< HEAD
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    "Falta la clave de Supabase. Revisa EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY en .env.local"
-  );
-}
+const authStorage =
+  Platform.OS === "web"
+    ? {
+        getItem: async (key: string) =>
+          typeof window === "undefined" ? null : window.localStorage.getItem(key),
+        setItem: async (key: string, value: string) => {
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem(key, value);
+          }
+        },
+        removeItem: async (key: string) => {
+          if (typeof window !== "undefined") {
+            window.localStorage.removeItem(key);
+          }
+        },
+      }
+    : AsyncStorage;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storage: AsyncStorage,
+    storage: authStorage,
     persistSession: true,
     autoRefreshToken: true,
-=======
-
-const supabaseUrl = rawSupabaseUrl.replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
-const supabaseAnonKey = rawSupabaseAnonKey.trim();
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
->>>>>>> 79ef313aabc4ad316b8ee8d663b807b138155234
     detectSessionInUrl: false,
   },
 });

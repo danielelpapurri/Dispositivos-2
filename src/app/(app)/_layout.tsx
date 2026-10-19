@@ -11,9 +11,9 @@ export default function AppLayout() {
 			}}
 		>
 			<Stack.Screen name="index" options={{ title: "Aeronova Garage" }} />
-			<Stack.Screen name="formulario" options={{ title: "Agenda tu visita" }} />
+			<Stack.Screen name="formulario" options={{ title: "Solicitar información" }} />
 			<Stack.Screen name="resultado" options={{ title: "Solicitud recibida" }} />
-			<Stack.Screen name="registros" options={{ title: "Registros" }} />
+			<Stack.Screen name="registros" options={{ title: "Solicitudes recibidas" }} />
 			<Stack.Screen name="imagenes" options={{ title: "Aeronaves" }} />
 			<Stack.Screen name="contacto" options={{ title: "Contacto" }} />
 		</Stack>

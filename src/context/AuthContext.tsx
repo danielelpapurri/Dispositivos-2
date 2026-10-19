@@ -23,11 +23,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setCargando(false);
-    });
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -35,7 +30,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setCargando(false);
     });
 
-    return () => subscription.unsubscribe();
+    let activo = true;
+    void supabase.auth
+      .getSession()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("No se pudo recuperar la sesión de Supabase:", error);
+          return;
+        }
+        if (activo) {
+          setSession(data.session);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error("No se pudo recuperar la sesión de Supabase:", error);
+      })
+      .finally(() => {
+        if (activo) {
+          setCargando(false);
+        }
+      });
+
+    return () => {
+      activo = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
