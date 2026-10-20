@@ -1,24 +1,30 @@
 import { useRouter } from "expo-router";
-import { useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Alert,
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native";
 import { supabase } from "../../lib/supabase";
 
 export default function Inicio() {
   const router = useRouter();
-  const [cerrandoSesion, setCerrandoSesion] = useState(false);
 
   const cerrarSesion = async () => {
-    setCerrandoSesion(true);
-    await supabase.auth.signOut();
-    setCerrandoSesion(false);
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        Alert.alert("Cerrar sesión", error.message);
+      }
+    } catch (error) {
+      Alert.alert(
+        "Cerrar sesión",
+        error instanceof Error ? error.message : String(error),
+      );
+    }
   };
 
   return (
@@ -32,7 +38,7 @@ export default function Inicio() {
 
         <View style={styles.overlay}>
           <Text style={styles.etiqueta}>AERONOVA GARAGE</Text>
-          <Text style={styles.titulo}>Vuela más lejos.</Text>
+          <Text style={styles.titulo}>Compra tu próximo avión.</Text>
           <Text style={styles.subtitulo}>
             Aeronaves seleccionadas, revisadas y listas para tu próxima aventura.
           </Text>
@@ -87,10 +93,9 @@ export default function Inicio() {
           onPress={() => router.push("/imagenes")}
         >
           <Text style={[styles.botonIcono, styles.botonIconoGrande]}>✈</Text>
-          <Text style={styles.botonTexto}>Aeronaves disponibles</Text>
+          <Text style={styles.botonTexto}>Aviones en venta</Text>
         </Pressable>
 
-        {/* NUEVO: botón Pilotos Registrados */}
         <Pressable
           style={({ pressed }) => [
             styles.botonGrande,
@@ -100,7 +105,7 @@ export default function Inicio() {
           onPress={() => router.push("/registros")}
         >
           <Text style={[styles.botonIcono, styles.botonIconoGrande]}>👥</Text>
-          <Text style={styles.botonTexto}>Pilotos Registrados</Text>
+          <Text style={styles.botonTexto}>Solicitudes recibidas</Text>
         </Pressable>
       </View>
 
@@ -138,20 +143,16 @@ export default function Inicio() {
           onPress={() => router.push("/formulario")}
         >
           <Text style={styles.botonIcono}>✦</Text>
-          <Text style={styles.botonTexto}>Agenda una visita</Text>
+          <Text style={styles.botonTexto}>Solicitar información</Text>
         </Pressable>
       </View>
 
-      <Pressable
-        style={({ pressed }) => [styles.botonCerrarSesion, pressed && styles.botonPresionado]}
-        onPress={cerrarSesion}
-        disabled={cerrandoSesion}
-      >
-        {cerrandoSesion ? <ActivityIndicator color="#A44336" /> : <Text style={styles.botonCerrarTexto}>Cerrar sesión</Text>}
+      <Pressable style={styles.botonCerrar} onPress={cerrarSesion}>
+        <Text style={styles.textoCerrar}>Cerrar sesión</Text>
       </Pressable>
 
       <Text style={styles.footer}>
-        AERONOVA GARAGE · VENTA DE AERONAVES
+        AERONOVA GARAGE · COMPRA Y VENTA DE AVIONES
       </Text>
     </ScrollView>
   );
@@ -160,9 +161,6 @@ export default function Inicio() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    width: "100%",
-    maxWidth: 1000,
-    alignSelf: "center",
     backgroundColor: "#F4F7F8",
     padding: 18,
   },
@@ -290,7 +288,6 @@ const styles = StyleSheet.create({
   },
   filaBotones: {
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: 12,
     alignItems: "stretch",
   },
@@ -307,7 +304,6 @@ const styles = StyleSheet.create({
   },
   botonPequeno: {
     flex: 1,
-    minWidth: 100,
     minHeight: 118,
     borderRadius: 18,
     padding: 14,
@@ -352,20 +348,16 @@ const styles = StyleSheet.create({
   botonTextoOscuro: {
     color: "#092536",
   },
-  botonCerrarSesion: {
-    minHeight: 48,
+  botonCerrar: {
+    backgroundColor: "#8E3B46",
+    padding: 14,
+    borderRadius: 14,
     alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 13,
-    borderWidth: 1,
-    borderColor: "#E4C5BF",
-    backgroundColor: "#FFF8F6",
     marginTop: 20,
   },
-  botonCerrarTexto: {
-    color: "#A44336",
-    fontSize: 14,
-    fontWeight: "800",
+  textoCerrar: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
   },
   cardCompacto: {
     flex: 1,

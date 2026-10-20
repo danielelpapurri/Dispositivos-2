@@ -1,33 +1,55 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function Resultado() {
   const router = useRouter();
+  const { id, nombre, correo, telefono, aeronaveInteres } =
+    useLocalSearchParams<{
+      id: string;
+      nombre: string;
+      correo: string;
+      telefono: string;
+      aeronaveInteres: string;
+    }>();
 
   return (
-    <View style={styles.page}>
-      <View style={styles.content}>
-        <View style={styles.icon}><Text style={styles.check}>✓</Text></View>
-        <Text style={styles.eyebrow}>SOLICITUD RECIBIDA</Text>
-        <Text style={styles.title}>Gracias por confiar en Aeronova.</Text>
-        <Text style={styles.copy}>Tus datos quedaron guardados. Nuestro equipo se pondrá en contacto contigo pronto.</Text>
-        <Pressable style={({ pressed }) => [styles.button, pressed && styles.buttonPressed]} onPress={() => router.push("/registros")}>
-          <Text style={styles.buttonText}>Ver solicitudes  →</Text>
-        </Pressable>
+    <View style={styles.container}>
+      <View style={styles.icono}>
+        <Text style={styles.check}>✓</Text>
       </View>
+      <Text style={styles.eyebrow}>SOLICITUD GUARDADA</Text>
+      <Text style={styles.titulo}>Gracias, {nombre || "cliente"}.</Text>
+      <Text style={styles.texto}>
+        Recibimos tu solicitud de información para comprar un avión. Nuestro equipo se pondrá en contacto contigo.
+      </Text>
+
+      <View style={styles.resumen}>
+        {id ? <Text style={styles.label}>Registro #{id}</Text> : null}
+        <Text style={styles.dato}>{correo}</Text>
+        <Text style={styles.dato}>{telefono}</Text>
+        <Text style={styles.dato}>Avión de interés: {aeronaveInteres || "Sin dato"}</Text>
+      </View>
+
+      <Pressable
+        style={styles.boton}
+        onPress={() => router.push("/registros")}
+      >
+        <Text style={styles.botonTexto}>Ver solicitudes</Text>
+      </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  page: { flex: 1, justifyContent: "center", padding: 20, backgroundColor: "#F3F6F4" },
-  content: { width: "100%", maxWidth: 480, alignSelf: "center", alignItems: "center", padding: 28, borderRadius: 20, borderWidth: 1, borderColor: "#DCE7E1", backgroundColor: "#FFFFFF", shadowColor: "#173A34", shadowOpacity: 0.08, shadowRadius: 20, shadowOffset: { width: 0, height: 9 }, elevation: 3 },
-  icon: { width: 62, height: 62, alignItems: "center", justifyContent: "center", borderRadius: 21, backgroundColor: "#E4EEDC", marginBottom: 19 },
-  check: { color: "#146B67", fontSize: 33, fontWeight: "800" },
-  eyebrow: { color: "#176C64", fontSize: 10, fontWeight: "800", letterSpacing: 1.2, marginBottom: 9 },
-  title: { color: "#102C35", fontSize: 27, lineHeight: 33, fontWeight: "800", textAlign: "center", marginBottom: 10 },
-  copy: { color: "#657771", fontSize: 14, lineHeight: 22, textAlign: "center", marginBottom: 22 },
-  button: { minHeight: 51, width: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#146B67", borderRadius: 11 },
-  buttonPressed: { opacity: 0.85 },
-  buttonText: { color: "#FFFFFF", fontSize: 14, fontWeight: "800" },
+  container: { flex: 1, backgroundColor: "#F4F7F8", padding: 24, justifyContent: "center" },
+  icono: { width: 66, height: 66, borderRadius: 33, backgroundColor: "#D7B56D", alignItems: "center", justifyContent: "center", alignSelf: "center", marginBottom: 22 },
+  check: { color: "#092536", fontSize: 34, fontWeight: "bold" },
+  eyebrow: { color: "#B17C2F", fontSize: 11, fontWeight: "bold", letterSpacing: 1.5, textAlign: "center", marginBottom: 10 },
+  titulo: { color: "#092536", fontSize: 30, fontWeight: "bold", textAlign: "center", marginBottom: 12 },
+  texto: { color: "#607580", fontSize: 15, lineHeight: 23, textAlign: "center", marginBottom: 22 },
+  resumen: { backgroundColor: "#FFFFFF", borderRadius: 16, padding: 18, borderWidth: 1, borderColor: "#D8E1E4", marginBottom: 18 },
+  label: { color: "#092536", fontWeight: "bold", marginBottom: 8 },
+  dato: { color: "#607580", fontSize: 14, marginTop: 3 },
+  boton: { backgroundColor: "#092536", paddingVertical: 15, borderRadius: 13, alignItems: "center" },
+  botonTexto: { color: "#FFFFFF", fontWeight: "bold" },
 });

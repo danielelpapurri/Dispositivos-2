@@ -1,33 +1,25 @@
 import { Stack } from "expo-router";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, View } from "react-native";
 import { AuthProvider, useAuth } from "../context/AuthContext";
 
 function RootNavigator() {
-  const { session, loading } = useAuth();
+  const { session, cargando } = useAuth();
 
-  if (loading) {
+  if (cargando) {
     return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#146B67" />
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#C87591" />
       </View>
     );
   }
 
   return (
-    <Stack
-      screenOptions={{
-        headerStyle: { backgroundColor: "#102C35" },
-        headerTintColor: "#ffffff",
-        headerTitleStyle: { fontWeight: "700" },
-        contentStyle: { backgroundColor: "#F3F6F4" },
-        headerShadowVisible: false,
-      }}
-    >
+    <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={!session}>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" />
       </Stack.Protected>
       <Stack.Protected guard={!!session}>
-        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+        <Stack.Screen name="(app)" />
       </Stack.Protected>
     </Stack>
   );
@@ -40,7 +32,3 @@ export default function Layout() {
     </AuthProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  loading: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F3F6F4" },
-});

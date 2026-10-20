@@ -1,47 +1,69 @@
-import type { Session } from "@supabase/supabase-js";
-import type { PropsWithChildren } from "react";
-import { createContext, useContext, useEffect, useState } from "react";
+import { Session } from "@supabase/supabase-js";
+import {
+    createContext,
+    ReactNode,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 import { supabase } from "../lib/supabase";
 
-type AuthContextValue = {
+type AuthContextType = {
   session: Session | null;
-  loading: boolean;
+  cargando: boolean;
 };
 
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+const AuthContext = createContext<AuthContextType>({
+  session: null,
+  cargando: true,
+});
 
-export function AuthProvider({ children }: PropsWithChildren) {
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    let mounted = true;
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      if (mounted) {
-        setSession(nextSession);
-        setLoading(false);
-      }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      setCargando(false);
     });
 
-    void supabase.auth.getSession().then(({ data, error }) => {
-      if (mounted) {
-        if (!error) setSession(data.session);
-        setLoading(false);
-      }
-    });
+    let activo = true;
+    void supabase.auth
+      .getSession()
+      .then(({ data, error }) => {
+        if (error) {
+          console.error("No se pudo recuperar la sesión de Supabase:", error);
+          return;
+        }
+        if (activo) {
+          setSession(data.session);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error("No se pudo recuperar la sesión de Supabase:", error);
+      })
+      .finally(() => {
+        if (activo) {
+          setCargando(false);
+        }
+      });
 
     return () => {
-      mounted = false;
-      authListener.subscription.unsubscribe();
+      activo = false;
+      subscription.unsubscribe();
     };
   }, []);
 
-  return <AuthContext.Provider value={{ session, loading }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ session, cargando }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth debe usarse dentro de AuthProvider");
-  return context;
+  return useContext(AuthContext);
 }
