@@ -8,7 +8,7 @@ export default function VuelosPrueba() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image
-        source={require("../../assets/inicio.jpg")}
+        source={require("../../../assets/inicio.jpg")}
         style={styles.imagen}
         contentFit="cover"
       />
@@ -39,7 +39,7 @@ export default function VuelosPrueba() {
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, backgroundColor: "#F4F7F8", padding: 20 },
+  container: { flexGrow: 1, width: "100%", maxWidth: 480, alignSelf: "center", backgroundColor: "#F4F7F8", padding: 20 },
   imagen: { width: "100%", height: 190, borderRadius: 20, marginBottom: 22 },
   eyebrow: { color: "#B17C2F", fontSize: 11, fontWeight: "bold", letterSpacing: 1.5, marginBottom: 9 },
   titulo: { color: "#092536", fontSize: 30, fontWeight: "bold", marginBottom: 9 },

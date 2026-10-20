@@ -1,22 +1,32 @@
 import { useRouter } from "expo-router";
+import { useState } from "react";
 import {
-  Image,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
+    ActivityIndicator,
+    Image,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
 } from "react-native";
+import { supabase } from "../../lib/supabase";
 
 export default function Inicio() {
   const router = useRouter();
+  const [cerrandoSesion, setCerrandoSesion] = useState(false);
+
+  const cerrarSesion = async () => {
+    setCerrandoSesion(true);
+    await supabase.auth.signOut();
+    setCerrandoSesion(false);
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* PORTADA PRINCIPAL */}
       <View style={styles.hero}>
         <Image
-          source={require("../../assets/inicio.jpg")}
+          source={require("../../../assets/inicio.jpg")}
           style={styles.imagenHero}
         />
 
@@ -132,6 +142,14 @@ export default function Inicio() {
         </Pressable>
       </View>
 
+      <Pressable
+        style={({ pressed }) => [styles.botonCerrarSesion, pressed && styles.botonPresionado]}
+        onPress={cerrarSesion}
+        disabled={cerrandoSesion}
+      >
+        {cerrandoSesion ? <ActivityIndicator color="#A44336" /> : <Text style={styles.botonCerrarTexto}>Cerrar sesión</Text>}
+      </Pressable>
+
       <Text style={styles.footer}>
         AERONOVA GARAGE · VENTA DE AERONAVES
       </Text>
@@ -142,6 +160,9 @@ export default function Inicio() {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
+    width: "100%",
+    maxWidth: 1000,
+    alignSelf: "center",
     backgroundColor: "#F4F7F8",
     padding: 18,
   },
@@ -269,6 +290,7 @@ const styles = StyleSheet.create({
   },
   filaBotones: {
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: 12,
     alignItems: "stretch",
   },
@@ -285,6 +307,7 @@ const styles = StyleSheet.create({
   },
   botonPequeno: {
     flex: 1,
+    minWidth: 100,
     minHeight: 118,
     borderRadius: 18,
     padding: 14,
@@ -328,6 +351,21 @@ const styles = StyleSheet.create({
   },
   botonTextoOscuro: {
     color: "#092536",
+  },
+  botonCerrarSesion: {
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 13,
+    borderWidth: 1,
+    borderColor: "#E4C5BF",
+    backgroundColor: "#FFF8F6",
+    marginTop: 20,
+  },
+  botonCerrarTexto: {
+    color: "#A44336",
+    fontSize: 14,
+    fontWeight: "800",
   },
   cardCompacto: {
     flex: 1,

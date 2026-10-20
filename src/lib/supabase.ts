@@ -1,22 +1,27 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createClient } from "@supabase/supabase-js";
+import { Platform } from "react-native";
 import "react-native-url-polyfill/auto";
 
-const rawSupabaseUrl =
-  process.env.EXPO_PUBLIC_SUPABASE_URL ??
-  "https://tmrlooalutwvtxqmqotq.supabase.co";
-
-const rawSupabaseAnonKey =
-  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ??
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRtcmxvb2FsdXR3dnR4cW1xb3RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA0NzkwMDEsImV4cCI6MjEwNjA1NTAwMX0.udzfTutxo6CEy2C5jb7pgKDkCfuK7NlLh1yGpaB5i4I";
-
-
-const supabaseUrl = rawSupabaseUrl.replace(/\/rest\/v1\/?$/, "").replace(/\/+$/, "");
-const supabaseAnonKey = rawSupabaseAnonKey.trim();
+const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnonKey =
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
+  "";
+const serverStorage = {
+  getItem: async (_key: string) => null,
+  setItem: async (_key: string, _value: string) => {},
+  removeItem: async (_key: string) => {},
+};
+const authStorage = Platform.OS === "web" && typeof window === "undefined"
+  ? serverStorage
+  : AsyncStorage;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: false,
-    autoRefreshToken: false,
+    storage: authStorage,
+    persistSession: true,
+    autoRefreshToken: true,
     detectSessionInUrl: false,
   },
 });

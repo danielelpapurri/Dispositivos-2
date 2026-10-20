@@ -87,7 +87,7 @@ export default function Imagenes() {
 }
 
 const styles = StyleSheet.create({
-	container: { flexGrow: 1, backgroundColor: "#EEF3F4", padding: 20 },
+	container: { flexGrow: 1, width: "100%", maxWidth: 920, alignSelf: "center", backgroundColor: "#EEF3F4", padding: 20 },
 	portada: { height: 190, borderRadius: 20, overflow: "hidden", marginBottom: 22, elevation: 4 },
 	imagenPortada: { width: "100%", height: "100%" },
 	portadaTexto: { position: "absolute", left: 0, right: 0, bottom: 0, padding: 18, backgroundColor: "rgba(9, 37, 54, 0.78)" },

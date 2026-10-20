@@ -30,7 +30,7 @@ export default function Explore() {
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, backgroundColor: "#F4F7F8", padding: 20 },
+  container: { flexGrow: 1, width: "100%", maxWidth: 480, alignSelf: "center", backgroundColor: "#F4F7F8", padding: 20 },
   eyebrow: { color: "#B17C2F", fontSize: 11, fontWeight: "bold", letterSpacing: 1.5, marginBottom: 9 },
   titulo: { color: "#092536", fontSize: 30, fontWeight: "bold", marginBottom: 9 },
   subtitulo: { color: "#607580", fontSize: 15, lineHeight: 22, marginBottom: 20 },

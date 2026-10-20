@@ -1,22 +1,46 @@
 import { Stack } from "expo-router";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { AuthProvider, useAuth } from "../context/AuthContext";
 
-export default function Layout() {
+function RootNavigator() {
+  const { session, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size="large" color="#146B67" />
+      </View>
+    );
+  }
+
   return (
     <Stack
       screenOptions={{
-        headerStyle: { backgroundColor: "#092536" },
+        headerStyle: { backgroundColor: "#102C35" },
         headerTintColor: "#ffffff",
-        headerTitleStyle: { fontWeight: "bold" },
-        contentStyle: { backgroundColor: "#F4F7F8" },
+        headerTitleStyle: { fontWeight: "700" },
+        contentStyle: { backgroundColor: "#F3F6F4" },
+        headerShadowVisible: false,
       }}
     >
-      <Stack.Screen name="index" options={{ title: "Aeronova Garage" }} />
-      <Stack.Screen name="formulario" options={{ title: "Agenda tu visita" }} />
-      <Stack.Screen name="resultado" options={{ title: "Solicitud recibida" }} />
-      <Stack.Screen name="registros" options={{ title: "Pilotos Registrados" }} />
-      <Stack.Screen name="imagenes" options={{ title: "Aeronaves" }} />
-      <Stack.Screen name="contacto" options={{ title: "Contacto" }} />
-      <Stack.Screen name="vuelos-prueba" options={{ title: "Vuelos de prueba" }} />
+      <Stack.Protected guard={!session}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+      </Stack.Protected>
+      <Stack.Protected guard={!!session}>
+        <Stack.Screen name="(app)" options={{ headerShown: false }} />
+      </Stack.Protected>
     </Stack>
   );
 }
+
+export default function Layout() {
+  return (
+    <AuthProvider>
+      <RootNavigator />
+    </AuthProvider>
+  );
+}
+
+const styles = StyleSheet.create({
+  loading: { flex: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#F3F6F4" },
+});
