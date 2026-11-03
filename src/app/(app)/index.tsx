@@ -157,6 +157,21 @@ export default function Inicio() {
           <Text style={styles.botonIcono}>✦</Text>
           <Text style={styles.botonTexto}>Solicitar información</Text>
         </Pressable>
+
+        /** aqui va lo nuevo de los 3 botones */
+          <Pressable
+          style={({ pressed }) => [
+            styles.botonPequeno,
+            styles.botonFormulario,
+            pressed && styles.botonPresionado,
+          ]}
+          onPress={() => router.push("/formulario")}
+        >
+          <Text style={styles.botonIcono}>✦</Text>
+          <Text style={styles.botonTexto}>Solicitar información</Text>
+        </Pressable>
+
+        /**/
       </View>
 
       <Pressable style={styles.botonCerrar} onPress={cerrarSesion}>
