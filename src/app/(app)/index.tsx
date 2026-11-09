@@ -109,6 +109,18 @@ export default function Inicio() {
         </Pressable>
       </View>
 
+      <Pressable
+        style={({ pressed }) => [
+          styles.botonGrande,
+          styles.botonAeronaves,
+          pressed && styles.botonPresionado,
+        ]}
+        onPress={() => router.push("/catalogo")}
+      >
+        <Text style={[styles.botonIcono, styles.botonIconoGrande]}>▤</Text>
+        <Text style={styles.botonTexto}>Ver catálogo de productos</Text>
+      </Pressable>
+
       <View style={styles.filaBotones}>
         <Pressable
           style={({ pressed }) => [
