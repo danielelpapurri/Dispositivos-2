@@ -11,20 +11,18 @@ import {
   TextInput,
   View,
 } from "react-native";
+import {
+  aeronaveDemo,
+  type AeronaveCatalogo,
+} from "../../lib/aeronaveDemo";
 import { getErrorMessage } from "../../lib/errorMessage";
 import { supabase } from "../../lib/supabase";
 
-type Aeronave = {
-  codigo: string | number;
-  titulo: string;
-  descripcion: string | null;
-  detalle: string | null;
-  precio: number | string | null;
-};
-
 export default function Imagenes() {
   const router = useRouter();
-  const [aeronaves, setAeronaves] = useState<Aeronave[]>([]);
+  const [aeronaves, setAeronaves] = useState<AeronaveCatalogo[]>([
+    aeronaveDemo,
+  ]);
   const [busqueda, setBusqueda] = useState("");
   const [cargando, setCargando] = useState(true);
   const [actualizando, setActualizando] = useState(false);
@@ -46,11 +44,19 @@ export default function Imagenes() {
         }
 
         if (activa) {
-          setAeronaves(data ?? []);
+          const aeronavesSupabase = data ?? [];
+          setAeronaves(
+            aeronavesSupabase.some(
+              (item) => String(item.codigo) === String(aeronaveDemo.codigo),
+            )
+              ? aeronavesSupabase
+              : [...aeronavesSupabase, aeronaveDemo],
+          );
           setErrorTexto("");
         }
       } catch (error) {
         if (activa) {
+          setAeronaves([aeronaveDemo]);
           setErrorTexto(getErrorMessage(error));
         }
       } finally {
@@ -124,7 +130,7 @@ export default function Imagenes() {
             </View>
           </View>
 
-          <Text style={styles.eyebrow}>INVENTARIO EN SUPABASE</Text>
+          <Text style={styles.eyebrow}>INVENTARIO DE AERONAVES</Text>
           <Text style={styles.titulo}>Aviones en venta</Text>
           <Text style={styles.subtitulo}>
             Explora las aeronaves registradas y escanea su código QR para abrir
@@ -210,7 +216,7 @@ export default function Imagenes() {
             <Text style={styles.estadoTexto}>
               {busqueda
                 ? "Prueba con otro modelo o código."
-                : "Agrega aeronaves en la tabla catalogo de Supabase y actualiza la lista."}
+                : "El catálogo también incluye una aeronave de demostración local."}
             </Text>
           </View>
         ) : null

@@ -10,20 +10,18 @@ import {
   Text,
   View,
 } from "react-native";
+import {
+  aeronaveDemo,
+  type AeronaveCatalogo,
+} from "../../lib/aeronaveDemo";
 import { supabase } from "../../lib/supabase";
 import { getErrorMessage } from "../../lib/errorMessage";
 
-type Aeronave = {
-  codigo: string | number;
-  titulo: string;
-  descripcion: string | null;
-  detalle: string | null;
-  precio: number | string | null;
-};
-
 export default function Inicio() {
   const router = useRouter();
-  const [aeronaves, setAeronaves] = useState<Aeronave[]>([]);
+  const [aeronaves, setAeronaves] = useState<AeronaveCatalogo[]>([
+    aeronaveDemo,
+  ]);
   const [cargando, setCargando] = useState(true);
   const [errorTexto, setErrorTexto] = useState<string | null>(null);
   const [actualizacion, setActualizacion] = useState(0);
@@ -43,11 +41,19 @@ export default function Inicio() {
         }
 
         if (activa) {
-          setAeronaves(data ?? []);
+          const aeronavesSupabase = data ?? [];
+          setAeronaves(
+            aeronavesSupabase.some(
+              (item) => String(item.codigo) === String(aeronaveDemo.codigo),
+            )
+              ? aeronavesSupabase
+              : [...aeronavesSupabase, aeronaveDemo],
+          );
           setErrorTexto(null);
         }
       } catch (error) {
         if (activa) {
+          setAeronaves([aeronaveDemo]);
           setErrorTexto(
             getErrorMessage(error),
           );
