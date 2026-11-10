@@ -1,17 +1,76 @@
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   Alert,
+  FlatList,
   Image,
   Pressable,
-  ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { supabase } from "../../lib/supabase";
+import { getErrorMessage } from "../../lib/errorMessage";
+
+type Aeronave = {
+  codigo: string | number;
+  titulo: string;
+  descripcion: string | null;
+  detalle: string | null;
+  precio: number | string | null;
+};
 
 export default function Inicio() {
   const router = useRouter();
+  const [aeronaves, setAeronaves] = useState<Aeronave[]>([]);
+  const [cargando, setCargando] = useState(true);
+  const [errorTexto, setErrorTexto] = useState<string | null>(null);
+  const [actualizacion, setActualizacion] = useState(0);
+
+  useEffect(() => {
+    let activa = true;
+
+    const cargarCatalogo = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("catalogo")
+          .select("codigo, titulo, descripcion, detalle, precio")
+          .order("titulo", { ascending: true });
+
+        if (error) {
+          throw error;
+        }
+
+        if (activa) {
+          setAeronaves(data ?? []);
+          setErrorTexto(null);
+        }
+      } catch (error) {
+        if (activa) {
+          setErrorTexto(
+            getErrorMessage(error),
+          );
+        }
+      } finally {
+        if (activa) {
+          setCargando(false);
+        }
+      }
+    };
+
+    void cargarCatalogo();
+
+    return () => {
+      activa = false;
+    };
+  }, [actualizacion]);
+
+  const actualizarCatalogo = () => {
+    setErrorTexto(null);
+    setCargando(true);
+    setActualizacion((actual) => actual + 1);
+  };
 
   const cerrarSesion = async () => {
     try {
@@ -27,74 +86,120 @@ export default function Inicio() {
     }
   };
 
+  if (cargando) {
+    return (
+      <View style={styles.centro}>
+        <ActivityIndicator size="large" color="#B17C2F" />
+        <Text style={styles.cargandoTexto}>Consultando aeronaves en Supabase...</Text>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* PORTADA PRINCIPAL */}
-      <View style={styles.hero}>
-        <Image
-          source={require("../../../assets/inicio.jpg")}
-          style={styles.imagenHero}
-        />
-
-        <View style={styles.overlay}>
-          <Text style={styles.etiqueta}>AERONOVA GARAGE</Text>
-          <Text style={styles.titulo}>Compra tu próximo avión.</Text>
-          <Text style={styles.subtitulo}>
-            Aeronaves seleccionadas, revisadas y listas para tu próxima aventura.
-          </Text>
-        </View>
-      </View>
-
-      {/* BIENVENIDA */}
-      <View style={styles.saludoBox}>
+    <FlatList
+      data={aeronaves}
+      keyExtractor={(item) => String(item.codigo)}
+      contentContainerStyle={styles.container}
+      ListHeaderComponent={
         <View>
-          <Text style={styles.saludoTitulo}>Tu próximo vuelo empieza aquí</Text>
-          <Text style={styles.saludoTexto}>
-            Explora nuestro hangar privado.
+          <View style={styles.hero}>
+            <Image
+              source={require("../../../assets/inicio.jpg")}
+              style={styles.imagenHero}
+            />
+            <View style={styles.overlay}>
+              <Text style={styles.etiqueta}>AERONOVA GARAGE</Text>
+              <Text style={styles.titulo}>Compra tu próximo avión.</Text>
+              <Text style={styles.subtitulo}>
+                Aeronaves seleccionadas, revisadas y listas para tu próxima aventura.
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.saludoBox}>
+            <View>
+              <Text style={styles.saludoTitulo}>Tu próximo vuelo empieza aquí</Text>
+              <Text style={styles.saludoTexto}>Explora nuestro hangar privado.</Text>
+            </View>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarTexto}>✈</Text>
+            </View>
+          </View>
+
+          <View style={styles.resumen}>
+            <View style={styles.resumenItem}>
+              <Text style={styles.resumenNumero}>{aeronaves.length}</Text>
+              <Text style={styles.resumenTexto}>Aeronaves disponibles</Text>
+            </View>
+            <View style={styles.separador} />
+            <View style={styles.resumenItem}>
+              <Text style={styles.resumenNumero}>24/7</Text>
+              <Text style={styles.resumenTexto}>Asesoría</Text>
+            </View>
+            <View style={styles.separador} />
+            <View style={styles.resumenItem}>
+              <Text style={styles.resumenNumero}>15+</Text>
+              <Text style={styles.resumenTexto}>Años volando</Text>
+            </View>
+          </View>
+
+          <Text style={styles.seccionTitulo}>Aeronaves disponibles</Text>
+          {errorTexto ? <Text style={styles.errorTexto}>{errorTexto}</Text> : null}
+          <Pressable
+            style={styles.botonActualizar}
+            onPress={() => router.push("/escanear")}
+            accessibilityRole="button"
+          >
+            <Text style={styles.botonActualizarTexto}>
+              Abrir cámara y escanear código QR
+            </Text>
+          </Pressable>
+        </View>
+      }
+      ListEmptyComponent={
+        <View style={styles.centroLista}>
+          <Text style={styles.vacio}>
+            {errorTexto
+              ? "No se pudo cargar el inventario."
+              : "No hay aeronaves registradas por el momento."}
           </Text>
         </View>
-
-        <View style={styles.avatar}>
-          <Text style={styles.avatarTexto}>✈</Text>
-        </View>
-      </View>
-
-      {/* RESUMEN */}
-      <View style={styles.resumen}>
-        <View style={styles.resumenItem}>
-          <Text style={styles.resumenNumero}>12</Text>
-          <Text style={styles.resumenTexto}>Aeronaves</Text>
-        </View>
-
-        <View style={styles.separador} />
-
-        <View style={styles.resumenItem}>
-          <Text style={styles.resumenNumero}>24/7</Text>
-          <Text style={styles.resumenTexto}>Asesoría</Text>
-        </View>
-
-        <View style={styles.separador} />
-
-        <View style={styles.resumenItem}>
-          <Text style={styles.resumenNumero}>15+</Text>
-          <Text style={styles.resumenTexto}>Años volando</Text>
-        </View>
-      </View>
-
-      <Text style={styles.seccionTitulo}>Descubre el hangar</Text>
-
-      <View style={styles.botonPrincipal}>
+      }
+      renderItem={({ item }) => (
         <Pressable
           style={({ pressed }) => [
-            styles.botonGrande,
-            styles.botonAeronaves,
-            pressed && styles.botonPresionado,
+            styles.card,
+            pressed && styles.cardPresionado,
           ]}
-          onPress={() => router.push("/imagenes")}
+          onPress={() =>
+            router.push({
+              pathname: "./detalle",
+              params: { codigo: String(item.codigo) },
+            })
+          }
+          accessibilityRole="button"
+          accessibilityLabel={`Ver detalles de ${item.titulo}`}
         >
-          <Text style={[styles.botonIcono, styles.botonIconoGrande]}>✈</Text>
-          <Text style={styles.botonTexto}>Aviones en venta</Text>
+          <View style={styles.iconoCaja}>
+            <Text style={styles.icono}>✈</Text>
+          </View>
+          <View style={styles.cardInfo}>
+            <Text style={styles.cardTitulo}>{item.titulo}</Text>
+            {item.descripcion ? (
+              <Text style={styles.cardDescripcion}>{item.descripcion}</Text>
+            ) : null}
+            {item.detalle ? (
+              <Text style={styles.cardDescripcion}>{item.detalle}</Text>
+            ) : null}
+            {item.precio !== null && item.precio !== undefined ? (
+              <Text style={styles.precio}>
+                {`COP ${Number(item.precio).toLocaleString("es-CO")}`}
+              </Text>
+            ) : null}
+            <Text style={styles.enlace}>Ver detalles →</Text>
+          </View>
         </Pressable>
+<<<<<<< HEAD
 
         <Pressable
           style={({ pressed }) => [
@@ -159,29 +264,94 @@ export default function Inicio() {
         </Pressable>
 
         /** aqui va lo nuevo de los 3 botones */
+=======
+      )}
+      ListFooterComponent={
+        <View>
+>>>>>>> 69db181 (Mejora catálogo y escaneo de aeronaves)
           <Pressable
-          style={({ pressed }) => [
-            styles.botonPequeno,
-            styles.botonFormulario,
-            pressed && styles.botonPresionado,
-          ]}
-          onPress={() => router.push("/formulario")}
-        >
-          <Text style={styles.botonIcono}>✦</Text>
-          <Text style={styles.botonTexto}>Solicitar información</Text>
-        </Pressable>
+            style={styles.botonActualizar}
+            onPress={actualizarCatalogo}
+            accessibilityRole="button"
+          >
+            <Text style={styles.botonActualizarTexto}>Actualizar catálogo</Text>
+          </Pressable>
 
-        /**/
-      </View>
+          <Text style={styles.seccionTitulo}>Descubre el hangar</Text>
+          <View style={styles.botonPrincipal}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.botonGrande,
+                styles.botonAeronaves,
+                pressed && styles.botonPresionado,
+              ]}
+              onPress={() => router.push("/imagenes")}
+            >
+              <Text style={[styles.botonIcono, styles.botonIconoGrande]}>✈</Text>
+              <Text style={styles.botonTexto}>Aviones en venta</Text>
+            </Pressable>
 
-      <Pressable style={styles.botonCerrar} onPress={cerrarSesion}>
-        <Text style={styles.textoCerrar}>Cerrar sesión</Text>
-      </Pressable>
+            <Pressable
+              style={({ pressed }) => [
+                styles.botonGrande,
+                styles.botonPilotos,
+                pressed && styles.botonPresionado,
+              ]}
+              onPress={() => router.push("/registros")}
+            >
+              <Text style={[styles.botonIcono, styles.botonIconoGrande]}>👥</Text>
+              <Text style={styles.botonTexto}>Solicitudes recibidas</Text>
+            </Pressable>
+          </View>
 
-      <Text style={styles.footer}>
-        AERONOVA GARAGE · COMPRA Y VENTA DE AVIONES
-      </Text>
-    </ScrollView>
+          <View style={styles.filaBotones}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.botonPequeno,
+                styles.botonContacto,
+                pressed && styles.botonPresionado,
+              ]}
+              onPress={() => router.push("/contacto")}
+            >
+              <Text style={styles.botonIcono}>⌖</Text>
+              <Text style={styles.botonTexto}>Visítanos</Text>
+            </Pressable>
+
+            <Pressable
+              style={({ pressed }) => [
+                styles.botonPequeno,
+                styles.botonDestacada,
+                pressed && styles.botonPresionado,
+              ]}
+              onPress={() => router.push("/vuelos-prueba")}
+            >
+              <Text style={styles.botonIcono}>◉</Text>
+              <Text style={styles.botonTextoOscuro}>Vuelos de prueba</Text>
+            </Pressable>
+
+            <Pressable
+              style={({ pressed }) => [
+                styles.botonPequeno,
+                styles.botonFormulario,
+                pressed && styles.botonPresionado,
+              ]}
+              onPress={() => router.push("/formulario")}
+            >
+              <Text style={styles.botonIcono}>✦</Text>
+              <Text style={styles.botonTexto}>Solicitar información</Text>
+            </Pressable>
+          </View>
+
+          <Pressable style={styles.botonCerrar} onPress={cerrarSesion}>
+            <Text style={styles.textoCerrar}>Cerrar sesión</Text>
+          </Pressable>
+
+          <Text style={styles.footer}>
+            AERONOVA GARAGE · COMPRA Y VENTA DE AVIONES
+          </Text>
+        </View>
+      }
+    />
   );
 }
 
@@ -309,6 +479,57 @@ const styles = StyleSheet.create({
     backgroundColor: "#D7B56D",
     borderColor: "#B17C2F",
     transform: [{ scale: 0.98 }],
+  },
+  centro: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F4F7F8",
+    padding: 24,
+  },
+  cargandoTexto: {
+    color: "#607580",
+    fontSize: 15,
+    marginTop: 12,
+    textAlign: "center",
+  },
+  centroLista: {
+    alignItems: "center",
+    paddingVertical: 24,
+  },
+  vacio: {
+    color: "#607580",
+    fontSize: 14,
+    textAlign: "center",
+  },
+  errorTexto: {
+    color: "#9C2F36",
+    fontSize: 13,
+    lineHeight: 19,
+    marginBottom: 12,
+  },
+  precio: {
+    color: "#B17C2F",
+    fontSize: 15,
+    fontWeight: "bold",
+    marginTop: 8,
+  },
+  enlace: {
+    color: "#176C64",
+    fontSize: 13,
+    fontWeight: "bold",
+    marginTop: 8,
+  },
+  botonActualizar: {
+    backgroundColor: "#E5EDF0",
+    borderRadius: 13,
+    alignItems: "center",
+    padding: 13,
+    marginBottom: 24,
+  },
+  botonActualizarTexto: {
+    color: "#092536",
+    fontWeight: "bold",
   },
   botonPrincipal: {
     width: "100%",

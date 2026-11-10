@@ -43,9 +43,12 @@ export default function Login() {
       });
 
       if (error) {
-        const mensajeError = error.message === "Invalid API key"
-          ? "La clave pública no corresponde a la URL del proyecto Supabase. Revisa ambos valores en .env.local."
-          : error.message;
+        const mensajeError =
+          error.message === "Invalid API key"
+            ? "La clave pública no corresponde a la URL del proyecto Supabase. Revisa ambos valores en .env.local."
+            : error.message === "Invalid login credentials"
+              ? "Correo o contraseña incorrectos. Si aún no tienes una cuenta, regístrate. Si acabas de registrarte, confirma tu correo y vuelve a intentarlo."
+              : error.message;
         setMensaje(mensajeError);
         Alert.alert("No se pudo iniciar sesión", mensajeError);
         return;

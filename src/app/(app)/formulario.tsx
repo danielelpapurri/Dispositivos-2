@@ -1,4 +1,4 @@
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
@@ -13,11 +13,14 @@ import { supabase } from "../../lib/supabase";
 
 export default function Formulario() {
   const router = useRouter();
+  const { aeronaveInteres: aeronaveParam } = useLocalSearchParams<{
+    aeronaveInteres?: string;
+  }>();
 
   const [nombre, setNombre] = useState("");
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
-  const [aeronaveInteres, setAeronaveInteres] = useState("");
+  const [aeronaveInteres, setAeronaveInteres] = useState(aeronaveParam ?? "");
   const [guardando, setGuardando] = useState(false);
   const [mensaje, setMensaje] = useState("");
 
