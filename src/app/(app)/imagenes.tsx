@@ -219,7 +219,7 @@ export default function Imagenes() {
                 : "El catálogo también incluye una aeronave de demostración local."}
             </Text>
           </View>
-        ) : null
+        ) : undefined
       }
       renderItem={({ item }) => (
         <Pressable

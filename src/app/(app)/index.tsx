@@ -205,76 +205,9 @@ export default function Inicio() {
             <Text style={styles.enlace}>Ver detalles →</Text>
           </View>
         </Pressable>
-<<<<<<< HEAD
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.botonGrande,
-            styles.botonPilotos,
-            pressed && styles.botonPresionado,
-          ]}
-          onPress={() => router.push("/registros")}
-        >
-          <Text style={[styles.botonIcono, styles.botonIconoGrande]}>👥</Text>
-          <Text style={styles.botonTexto}>Solicitudes recibidas</Text>
-        </Pressable>
-      </View>
-
-      <Pressable
-        style={({ pressed }) => [
-          styles.botonGrande,
-          styles.botonAeronaves,
-          pressed && styles.botonPresionado,
-        ]}
-        onPress={() => router.push("/catalogo")}
-      >
-        <Text style={[styles.botonIcono, styles.botonIconoGrande]}>▤</Text>
-        <Text style={styles.botonTexto}>Ver catálogo de productos</Text>
-      </Pressable>
-
-      <View style={styles.filaBotones}>
-        <Pressable
-          style={({ pressed }) => [
-            styles.botonPequeno,
-            styles.botonContacto,
-            pressed && styles.botonPresionado,
-          ]}
-          onPress={() => router.push("/contacto")}
-        >
-          <Text style={styles.botonIcono}>⌖</Text>
-          <Text style={styles.botonTexto}>Visítanos</Text>
-        </Pressable>
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.botonPequeno,
-            styles.botonDestacada,
-            pressed && styles.botonPresionado,
-          ]}
-          onPress={() => router.push("/vuelos-prueba")}
-        >
-          <Text style={styles.botonIcono}>◉</Text>
-          <Text style={styles.botonTextoOscuro}>Vuelos de prueba</Text>
-        </Pressable>
-
-        <Pressable
-          style={({ pressed }) => [
-            styles.botonPequeno,
-            styles.botonFormulario,
-            pressed && styles.botonPresionado,
-          ]}
-          onPress={() => router.push("/formulario")}
-        >
-          <Text style={styles.botonIcono}>✦</Text>
-          <Text style={styles.botonTexto}>Solicitar información</Text>
-        </Pressable>
-
-        /** aqui va lo nuevo de los 3 botones */
-=======
       )}
       ListFooterComponent={
         <View>
->>>>>>> 69db181 (Mejora catálogo y escaneo de aeronaves)
           <Pressable
             style={styles.botonActualizar}
             onPress={actualizarCatalogo}
@@ -285,6 +218,20 @@ export default function Inicio() {
 
           <Text style={styles.seccionTitulo}>Descubre el hangar</Text>
           <View style={styles.botonPrincipal}>
+            <Pressable
+              style={({ pressed }) => [
+                styles.botonGrande,
+                styles.botonDestacada,
+                pressed && styles.botonPresionado,
+              ]}
+              onPress={() => router.push("/catalogo")}
+            >
+              <Text style={[styles.botonIcono, styles.botonIconoGrande]}>▤</Text>
+              <Text style={styles.botonTextoOscuro}>
+                Ver catálogo de productos
+              </Text>
+            </Pressable>
+
             <Pressable
               style={({ pressed }) => [
                 styles.botonGrande,
