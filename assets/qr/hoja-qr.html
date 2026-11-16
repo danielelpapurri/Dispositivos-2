@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hoja de QR · Aeronova Garage</title>
+  <style>
+    body { margin: 0; padding: 24px; font-family: Arial, Helvetica, sans-serif; background: #ffffff; color: #092536; }
+    h1 { margin: 0 0 4px; font-size: 24px; }
+    p { margin: 0 0 20px; color: #607580; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+    .tarjeta { border: 1px solid #D8E1E4; border-radius: 12px; padding: 16px; text-align: center; break-inside: avoid; }
+    .tarjeta.trampa { border: 2px dashed #9E2730; }
+    .codigo { font-size: 20px; font-weight: bold; letter-spacing: 1px; }
+    .nombre { margin: 4px 0 12px; color: #607580; }
+    .trampa .nombre { color: #9E2730; font-weight: bold; }
+    img { width: 100%; max-width: 220px; height: auto; image-rendering: pixelated; }
+    @media print { body { padding: 0; } }
+  </style>
+</head>
+<body>
+  <h1>Aeronova Garage · Códigos QR de prueba</h1>
+  <p>Cada QR contiene solo el texto del código de la tabla catalogo_qr en Supabase. Generados con <code>npm run qr</code>.</p>
+
+  <div class="grid">
+    <div class="tarjeta">
+      <div class="codigo">AER-001</div>
+      <div class="nombre">Cessna 172 Skyhawk</div>
+      <img src="AER-001.png" alt="QR AER-001" />
+    </div>
+    <div class="tarjeta">
+      <div class="codigo">AER-002</div>
+      <div class="nombre">Piper PA-28 Archer</div>
+      <img src="AER-002.png" alt="QR AER-002" />
+    </div>
+    <div class="tarjeta">
+      <div class="codigo">AER-003</div>
+      <div class="nombre">Cirrus SR22</div>
+      <img src="AER-003.png" alt="QR AER-003" />
+    </div>
+    <div class="tarjeta">
+      <div class="codigo">AER-004</div>
+      <div class="nombre">Beechcraft Bonanza G36</div>
+      <img src="AER-004.png" alt="QR AER-004" />
+    </div>
+    <div class="tarjeta trampa">
+      <div class="codigo">QR-TRAMPA</div>
+      <div class="nombre">Código inexistente - prueba de error</div>
+      <img src="QR-TRAMPA.png" alt="QR QR-TRAMPA" />
+    </div>
+  </div>
+</body>
+</html>

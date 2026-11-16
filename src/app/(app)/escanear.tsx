@@ -41,7 +41,7 @@ export default function Escanear() {
       if (error) throw error;
 
       if (!aeronave) {
-        setMensaje(`Código leído (${codigo}), pero la aeronave no existe.`);
+        setMensaje(`Código leído (${codigo}), pero el producto no existe.`);
         return;
       }
 
