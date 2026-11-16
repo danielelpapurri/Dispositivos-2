@@ -52,7 +52,7 @@ export default function Registro() {
       setMensaje("");
       setRegistroCompleto(false);
 
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: correo.trim(),
         password,
         options: {
@@ -92,8 +92,11 @@ export default function Registro() {
 
       await supabase.auth.signOut();
       setRegistroCompleto(true);
-      setMensaje("Cuenta creada. Ahora puede iniciar sesión");
-      setTimeout(() => router.replace("/login"), 1200);
+      setMensaje(
+        data.session
+          ? "Cuenta creada. Ya puedes iniciar sesión."
+          : "Cuenta creada. Revisa tu correo y confirma la cuenta antes de iniciar sesión.",
+      );
     } catch (error) {
       setMensaje(
         error instanceof Error ? error.message : String(error),
