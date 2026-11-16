@@ -147,6 +147,45 @@ export default function Inicio() {
         </Pressable>
       </View>
 
+      {/* NUEVO: CATÁLOGO QR (Taller final) */}
+      <Text style={[styles.seccionTitulo, styles.seccionQR]}>Catálogo QR</Text>
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.card,
+          pressed && styles.cardPresionado,
+        ]}
+        onPress={() => router.push("/catalogo")}
+      >
+        <View style={styles.iconoCaja}>
+          <Text style={styles.icono}>🛩️</Text>
+        </View>
+        <View style={styles.cardInfo}>
+          <Text style={styles.cardTitulo}>Catálogo interactivo</Text>
+          <Text style={styles.cardDescripcion}>Consulta nuestras aeronaves.</Text>
+        </View>
+        <Text style={styles.flecha}>›</Text>
+      </Pressable>
+
+      <Pressable
+        style={({ pressed }) => [
+          styles.card,
+          pressed && styles.cardPresionado,
+        ]}
+        onPress={() => router.push("/escanear")}
+      >
+        <View style={styles.iconoCaja}>
+          <Text style={styles.icono}>📷</Text>
+        </View>
+        <View style={styles.cardInfo}>
+          <Text style={styles.cardTitulo}>Escanear código QR</Text>
+          <Text style={styles.cardDescripcion}>
+            Abre la cámara y consulta una aeronave.
+          </Text>
+        </View>
+        <Text style={styles.flecha}>›</Text>
+      </Pressable>
+
       <Pressable style={styles.botonCerrar} onPress={cerrarSesion}>
         <Text style={styles.textoCerrar}>Cerrar sesión</Text>
       </Pressable>
@@ -266,6 +305,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#092536",
     marginBottom: 14,
+  },
+  seccionQR: {
+    marginTop: 24,
   },
   card: {
     backgroundColor: "#FFFFFF",
