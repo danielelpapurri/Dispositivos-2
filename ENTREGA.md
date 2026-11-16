@@ -9,7 +9,7 @@ Integrantes: Daniel y Helde.
 ## 1. Cómo correr el proyecto
 
 1. Crear `.env.local` a partir de `.env.example` con la URL y la clave pública de Supabase.
-2. En Supabase → SQL Editor, ejecutar `supabase/catalogo_qr.sql` (crea o completa la tabla, aplica RLS de solo lectura y muestra las comprobaciones).
+2. En Supabase, la tabla `catalogo_qr` debe existir con permiso de solo lectura (RLS).
 3. Instalar dependencias: `npm install`
 4. Generar los QR de prueba: `npm run qr` (los crea en `assets/qr/`).
 5. Iniciar: `npx expo start -c`
@@ -35,7 +35,7 @@ Integrantes: Daniel y Helde.
 | 8 | Si algo falla | Revisar la consola de Metro y el mensaje exacto de Supabase |
 
 Errores frecuentes:
-- Catálogo vacío o *permission denied* → ejecutar `supabase/catalogo_qr.sql`.
+- Catálogo vacío o *permission denied* → revisar los permisos SELECT/RLS de `catalogo_qr` en Supabase.
 - *Project is incompatible with this version of Expo Go* → usar Expo Go SDK 58.
 - El QR no abre la ficha → el texto del QR debe ser EXACTAMENTE el `codigo` (ej. `AER-001`).
 
@@ -94,7 +94,7 @@ Errores frecuentes:
 
 ## 4. Checklist de entrega
 
-- [ ] `supabase/catalogo_qr.sql` ejecutado; la comprobación `has_table_privilege` devuelve `true`.
+- [ ] Tabla `catalogo_qr` en Supabase con permiso de lectura.
 - [ ] Catálogo muestra los registros (1,0).
 - [ ] Ver detalles abre el producto correcto (1,0).
 - [ ] Escáner funciona con la cámara real del celular (1,0).
